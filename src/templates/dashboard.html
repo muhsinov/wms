@@ -1,0 +1,124 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Dashboard - WMS{% endblock %}
+{% block page_title %}Dashboard{% endblock %}
+
+{% block extra_css %}
+    {# Circliful и Sparkline стили уже в base.html #}
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-3">
+        <div class="card-box">
+            <h4 class="header-title">Suppliers</h4>
+            <h2 class="text-primary mb-0">{{ total_suppliers }}</h2>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card-box">
+            <h4 class="header-title">Products</h4>
+            <h2 class="text-success mb-0">{{ total_products }}</h2>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card-box">
+            <h4 class="header-title">Inventory Items</h4>
+            <h2 class="text-info mb-0">{{ total_inventory_items }}</h2>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card-box">
+            <h4 class="header-title">Purchase Orders</h4>
+            <h2 class="text-warning mb-0">{{ total_orders }}</h2>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card-box">
+            <h4 class="header-title">Orders Last 7 Days</h4>
+            <div id="sparkline-orders"></div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card-box text-center">
+            <h4 class="header-title">Received vs Ordered</h4>
+            <div data-plugin="circliful"
+                 data-dimension="180"
+                 data-text="{{ percent_received }}%"
+                 data-info="Received"
+                 data-width="20"
+                 data-percent="{{ percent_received }}"
+                 data-fgcolor="#5b69bc"
+                 data-bgcolor="#ebeff2">
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card-box">
+            <h4 class="header-title">Mahsulotlar taqsimoti (Pie)</h4>
+            <span data-plugin="peity-pie"
+                  data-colors="#71b6f9,#435966,#ff8acc,#10c469,#f9c851,#ff5b5b"
+                  data-width="100"
+                  data-height="100">
+                  1{{ pie_data }}
+            </span>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card-box">
+            <h4 class="header-title">Zaxira holati (Donut)</h4>
+            <span data-plugin="peity-donut"
+                  data-colors="#10c469,#f9c851"
+                  data-width="100"
+                  data-height="100">{{ donut_data }}</span>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://code.jquery.com/ui/1.13.0/jquery-ui.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/peity@3.3.0/jquery.peity.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery-sparkline@2.4.0/jquery.sparkline.min.js"></script>
+
+<script src="{% static 'plugins/jquery-circliful/js/jquery.circliful.min.js' %}"></script>
+<script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+
+<script src="{% static 'js/jquery.core.js' %}"></script>
+<script src="{% static 'js/jquery.app.js' %}"></script>
+
+<script>var resizefunc = [];</script>
+
+<script>
+    $(document).ready(function () {
+        $('[data-plugin="peity-pie"]').peity("pie");
+        $('[data-plugin="peity-donut"]').peity("donut");
+
+        $("#sparkline-orders").sparkline(
+            {{ sparkline_orders|safe }},
+            {
+                type: 'line',
+                width: '100%',
+                height: '200',
+                lineColor: '#1abc9c',
+                fillColor: '#bdc3c7'
+            }
+        );
+
+        if (typeof Components !== "undefined" && Components.init) {
+            Components.init();
+        }
+    });
+</script>
+
+{% endblock %}
+
