@@ -6,7 +6,7 @@ from employee.models import Employee
 from .forms import EmployeeForm
 from main.decorators import employee_login_required
 
-@employee_login_required
+
 def employee_list(request):
     if request.method == 'POST' and 'create' in request.POST:
         create_form = EmployeeForm(request.POST)
