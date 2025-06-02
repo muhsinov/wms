@@ -16,6 +16,7 @@ jobs:
         host: ${{ secrets.AWS_EC2_HOST }}
         username: ${{ secrets.AWS_EC2_USER }}
         key: ${{ secrets.AWS_EC2_SSH_KEY }}
+        debug: true
         script: |
           cd /home/ubuntu/wms
           git pull origin main

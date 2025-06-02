@@ -47,7 +47,7 @@ def employee_logout_view(request):
     return redirect('login')
 
 
-@employee_login_required
+
 def dashboard(request):
     employee = get_logged_employee(request)
     if not employee:
